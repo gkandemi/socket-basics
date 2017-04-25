@@ -7,7 +7,9 @@ socket.on("connect", function(){
 socket.on("message", function(message){
     console.log("New Message");
     console.log(message.text);
-    $(".messages").append("<p>" + message.text + "</p>");
+    var momentTimestamp = moment.utc(message.timestamp).local().format("H:mm");
+    
+    $(".messages").append("<p><strong>[" + momentTimestamp + "]</strong> " + message.text + "</p>");
 })
 
 var $form = jQuery("form#message_form");
@@ -18,7 +20,7 @@ $form.on("submit", function(event){
 
     var $message = $form.find("input[name='message']");
     socket.emit('message', {
-        text: $message.val()
+        text: $message.val(),
     })
 
     $message.val("");
