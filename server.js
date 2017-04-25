@@ -13,10 +13,11 @@ io.on('connection', function (socket) {
     socket.on('message', function(message){
         console.log('Message received : ' + message.text);
 
-        io.emit // mesajı gönderen dahil herkese gönder...
+        // io.emit // mesajı gönderen dahil herkese gönder...
 
         // mesaji gönderen haric herkese gönder...
-        socket.broadcast.emit('message', message);
+        // socket.broadcast.emit('message', message);
+         io.emit('message', message);
 
     })
 
