@@ -11,6 +11,34 @@ app.use(express.static(__dirname + "/public"));
 
 var clientInfo = {};
 
+function sendCurrentUsers(socket) {
+
+    // kişinin odasında bulunan kişileri alabilmek için
+    // aktif olan kişinin bilgilerini tutuyoruz..
+    var info = clientInfo[socket.id];
+    var users = [];
+
+    if (typeof info === "undefined") {
+        return;
+    }
+
+    Object.keys(clientInfo).forEach(function (socketId) {
+        var userInfo = clientInfo[socketId];
+
+        if (userInfo.room === info.room) {
+            users.push(userInfo.name);
+        }
+    });
+
+    socket.emit("message", {
+        name : "System",
+        text : "Current Users: " + users.join(", "),
+        timestamp : moment().valueOf()
+    })
+
+}
+
+
 io.on('connection', function (socket) {
     console.log("user connected via sockect.io!!!");
 
@@ -23,21 +51,21 @@ io.on('connection', function (socket) {
         // belirli bir room için gonderim yapabiliriz..
         // socket.brodcast.to.emit('message', {});
         socket.to(req.room).emit('message', {
-            name : "System",
-            timestamp : moment().valueOf(),
+            name: "System",
+            timestamp: moment().valueOf(),
             text: req.name + " has joined!!!"
         })
     })
 
-    socket.on("disconnect", function(){
+    socket.on("disconnect", function () {
         var userData = clientInfo[socket.id];
 
-        if(typeof userData !== "undefined"){
+        if (typeof userData !== "undefined") {
             socket.leave(userData.room);
             io.to(userData.room).emit("message", {
-                name : "System",
-                text : userData.name + " has left",
-                timestamp : moment().valueOf()
+                name: "System",
+                text: userData.name + " has left",
+                timestamp: moment().valueOf()
             });
             delete clientInfo[socket.id];
         }
@@ -46,12 +74,15 @@ io.on('connection', function (socket) {
     socket.on('message', function (message) {
         console.log('Message received : ' + message.text);
 
-        // io.emit // mesajı gönderen dahil herkese gönder...
-        // mesaji gönderen haric herkese gönder...
-        // socket.broadcast.emit('message', message);
-        message.timestamp = moment().valueOf();
-        io.to(clientInfo[socket.id].room).emit('message', message);
-
+        if (message.text === "@currentUser") {
+            sendCurrentUsers(socket);
+        } else {
+            // io.emit // mesajı gönderen dahil herkese gönder...
+            // mesaji gönderen haric herkese gönder...
+            // socket.broadcast.emit('message', message);
+            message.timestamp = moment().valueOf();
+            io.to(clientInfo[socket.id].room).emit('message', message);
+        }
     })
 
     socket.emit("message", {
