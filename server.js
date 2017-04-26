@@ -29,6 +29,20 @@ io.on('connection', function (socket) {
         })
     })
 
+    socket.on("disconnect", function(){
+        var userData = clientInfo[socket.id];
+
+        if(typeof userData !== "undefined"){
+            socket.leave(userData.room);
+            io.to(userData.room).emit("message", {
+                name : "System",
+                text : userData.name + " has left",
+                timestamp : moment().valueOf()
+            });
+            delete clientInfo[socket.id];
+        }
+    })
+
     socket.on('message', function (message) {
         console.log('Message received : ' + message.text);
 
