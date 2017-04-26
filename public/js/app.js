@@ -1,10 +1,19 @@
 var socket = io();
 var name = getQueryVariable("name") || "Bilinmeyen";
 var room = getQueryVariable("room") || "";
+
+$(".room-title").text(room);
+
 console.log(name + " joined " + room);
 
+
+// client server'a baglandiginda fire olur..
 socket.on("connect", function(){
     console.log("connected to the server");
+    socket.emit("joinRoom", {
+        name : name,
+        room : room
+    });
 })
 
 socket.on("message", function(message){
