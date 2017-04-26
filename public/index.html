@@ -2,19 +2,50 @@
 <html>
 
 <head>
-    <title>Anasayfa</title>
+    <title>Welcome to TT Chat :)</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
 </head>
 
 <body>
-<h1>Join Chat</h1>   
 
-<form action="chat.html">
-    <label for="">Display Name</label>
-    <input type="text" name="name">
-    <label for="">Chat Room</label>
-    <input type="text" name="room">
-    <button type="submit">Join Chat</button>
-</form>
+    <div class="vertical-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4 well">
+                    <h1>Join Chat</h1>
+                    <form action="chat.html">
+                        <div class="form-group">
+                            <label>Display Name</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="glyphicon glyphicon-user"></i>
+                                </span>
+                                <input type="text" name="name" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Room name</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-comment"></i>
+                                    </span>
+                                <input type="text" class="form-control" name="room">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block">Join Chat</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </body>
 
 </html>
